@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>순서가 있는 학생 목록</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      // 학생 데이터
+      const students = [
+        { order: 1, name: "김민지", food: { like: ["짜장면", "짬뽕"], hate: ["피자"] } },
+        { order: 2, name: "김요훈", food: { like: ["햄버거", "초밥"], hate: ["라면"] } },
+        { order: 3, name: "김윤지", food: { like: ["피자", "라면"], hate: ["떡볶이"] } },
+        { order: 4, name: "김재승", food: { like: ["초밥", "떡볶이"], hate: ["짜장면"] } },
+        { order: 5, name: "손정민", food: { like: ["짜장면", "파스타"], hate: ["짬뽕"] } },
+        { order: 6, name: "안은별", food: { like: ["짬뽕", "김밥"], hate: ["초밥"] } },
+        { order: 7, name: "윤종환", food: { like: ["피자", "치킨"], hate: ["햄버거"] } },
+        { order: 8, name: "최정민", food: { like: ["햄버거", "라면"], hate: ["파스타"] } },
+        { order: 9, name: "최현준", food: { like: ["짜장면", "떡볶이"], hate: ["김밥"] } },
+        { order: 10, name: "전선일", food: { like: ["초밥", "파스타"], hate: ["피자"] } },
+      ];
+
+      // id가 roo인 요소를 찾아서 root에 담아준다.
+      const root = document.getElementById("root");
+
+      /**
+       * @param
+       * @returns {element} 순서없는 리스트(ol)
+       * @description 학생 데이터를 이용해서 li태그를 만드는 함수
+      */
+      function checkpoint() {
+        console.log("디버깅: checkpoint 함수 시작");
+        // 순서가 있는 리스트를 만든다
+        const ol = document.createElement("ol");
+        // 학생 데이터 만큼 반복을 진행한다.
+        students.forEach((student) => {
+          console.log("디버깅: 학생 처리 - ", student.order, student.name);
+          // li태그를 생성한다.
+          const li = document.createElement("li");
+          // 백틱(`)을 사용해서 생성된 li태그에 학생의 번호와 이름을 집어넣는다.
+          li.textContent = `- ${student.order}. ${student.name}`;
+          ol.appendChild(li);
+        });
+        console.log("디버깅: 모든 학생 처리 완료", ol);
+        return ol;
+      }
+
+      const studentListOrdered = checkpoint();
+
+      // 받아온 데이터를 root에 넣어준다.
+      root.appendChild(studentListOrdered);
+      console.log("디버깅: 정렬된 학생 목록 DOM에 추가 완료");
+    </script>
+  </body>
+</html>
