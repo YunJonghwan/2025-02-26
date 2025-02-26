@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>학생 필터링</title>
+</head>
+<body>
+  <div id="root"></div>
+  <script>
+
+    // 학생 데이터
+    const students = [ 
+      { order: 1, name: '김민지', food: { like: ['짜장면', '짬뽕'], hate: ['피자'] } },
+      { order: 2, name: '김요훈', food: { like: ['햄버거', '초밥'], hate: ['라면'] } },
+      { order: 3, name: '김윤지', food: { like: ['피자', '라면'], hate: ['떡볶이'] } },
+      { order: 4, name: '김재승', food: { like: ['초밥', '떡볶이'], hate: ['짜장면'] } },
+      { order: 5, name: '손정민', food: { like: ['짜장면', '파스타'], hate: ['짬뽕'] } },
+      { order: 6, name: '안은별', food: { like: ['짬뽕', '김밥'], hate: ['초밥'] } },
+      { order: 7, name: '윤종환', food: { like: ['피자', '치킨'], hate: ['햄버거'] } },
+      { order: 8, name: '최정민', food: { like: ['햄버거', '라면'], hate: ['파스타'] } },
+      { order: 9, name: '최현준', food: { like: ['짜장면', '떡볶이'], hate: ['김밥'] } },
+      { order: 10, name: '전선일', food: { like: ['초밥', '파스타'], hate: ['피자'] } }
+    ];
+
+    /**
+     * param {object} 1. 기본 학생 데이터 | 2. 검색된 학생 데이터
+     * return {element} 학생 데이터를 li에 담아 ul을 반환
+     * desc 학생데이터를 사용하여 리스트를 만들어주는 함수
+    */
+    function renderStudentList(list) {
+      const ul = document.createElement("ul");
+      list.forEach((student) => {
+        const li = document.createElement("li");
+        li.textContent = student.name;
+        ul.appendChild(li);
+      });
+      return ul;
+    }
+
+    // id가 root인 요소를 찾아서 root에 담아준다.
+    const root = document.getElementById("root");
+
+    /**
+     * param
+     * returns {element} 화면 구성 요소
+     * desc 화면에 표시되는 리스트및 검색 버튼을 생성해주는 함수
+    */
+    function checkpoint() {
+      console.log("디버깅: checkpoint 함수 시작");
+      
+      /**
+       * param {object, string} 학생 데이터, 검색 데이터
+       * returns {boolean} 검색 결과가 있으면 true 결과가 없으면 false
+       * desc 이름 혹은 음식으로 데이터를 검색 했을 경우 해당 데이터와 일치하는 학생의 이름을 찾아주는 함수
+      */
+      function filterStudents(studentList, searchKeyword) {
+        console.log("디버깅: filterStudents 함수 호출됨", searchKeyword);
+        
+        //? 해당 조건이 필요한 이유는 뭐지?
+        // trim 메서드의 경우 검색한 데이터의 앞과 뒤에 공백이 존재한다면 제거해준는 메서드이다.
+        // 메서드가 실행되면 공백이 제거된 문자열이 반환 될 것인데 아래의 조건이 필요한 이유가 있는가?
+        if (searchKeyword.trim() === false) {
+          return studentList;
+        }
+        
+        // 검색하려는 데이터 앞과 뒤의 공백을 제거해준다.
+        //? toLowerCase메서드를 왜 사용하지?
+        // toLowerCase의 경우 입력받은 데이터를 소문자로 만들어주는 메서드인데 
+        // 한글로만 검색이 진행되는데 필요한 이유가 있는가?
+        const normalizedKeyword = searchKeyword.toLowerCase().trim();
+
+        return studentList.filter((student) => {
+          // 검색한 데이터가 학생 이름에 포함되는지 확인한다.
+          const nameMatch = student.name.toLowerCase().includes(normalizedKeyword);
+          
+          // 검색한 데이터가 좋아하는 음식에 포함되는지 확인한다.
+          const likeFoodMatch = student.food.like.some(food => 
+            food.toLowerCase().includes(normalizedKeyword)
+          );
+          
+          // 검색한 데이터가 싫어하는 음식에 포함되는지 확인한다.
+          const hateFoodMatch = student.food.hate.some(food => 
+            food.toLowerCase().includes(normalizedKeyword)
+          );
+
+          // OR 연산자를 if문으로 변경
+          if (nameMatch) {
+            return true;
+          }
+          if (likeFoodMatch) {
+            return true;
+          }
+          if (hateFoodMatch) {
+            return true;
+          }
+          return false;
+        });
+      }
+
+      // div 요소 생성
+      const container = document.createElement("div");
+
+      // input 요소 생성
+      const input = document.createElement("input");
+      input.placeholder = "학생 이름 또는 음식을 입력하세요...";
+      // 생성된 div 요소에 input 요소 추가
+      container.appendChild(input);
+
+      // 학생 데이터로 만들어진 리스트 받아온다.
+      let ul = renderStudentList(students);
+      // div에 ul 추가
+      container.appendChild(ul);
+
+      // input에 값이 들어왔을 때 이벤트 추가
+      input.addEventListener("input", () => {
+        console.log("디버깅: 입력값 변화", input.value);
+        // div에 기존의 ul 요소 삭제
+        container.removeChild(ul);
+        // 검색 결과에 따른 데이터를 가지고 온다.
+        const filtered = filterStudents(students, input.value);
+        // 해당 데이터로 리스트를 만들어준다.
+        ul = renderStudentList(filtered);
+        // div에 ul추가
+        container.appendChild(ul);
+      });
+
+      console.log("디버깅: 필터링 기능 포함 컨테이너 생성 완료", container);
+      return container;
+    }
+
+    const filterContainer = checkpoint();
+    root.appendChild(filterContainer);
+    console.log("디버깅: 필터링 컨테이너 DOM에 추가 완료");
+  </script>
+</body>
+</html>
