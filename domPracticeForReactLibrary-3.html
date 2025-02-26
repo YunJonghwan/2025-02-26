@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>학생 정보 테이블</title>
+    <style>
+      .grid-container {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1px;
+        background-color: #ccc;
+        border: 1px solid #ccc;
+      }
+      .grid-header,
+      .grid-cell {
+        background-color: white;
+        padding: 8px;
+        text-align: center;
+      }
+      .grid-header {
+        background-color: #f1f1f1;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      // 학생 데이터
+      const students = [
+        { order: 1, name: "김민지", food: { like: ["짜장면", "짬뽕"], hate: ["피자"] } },
+        { order: 2, name: "김요훈", food: { like: ["햄버거", "초밥"], hate: ["라면"] } },
+        { order: 3, name: "김윤지", food: { like: ["피자", "라면"], hate: ["떡볶이"] } },
+        { order: 4, name: "김재승", food: { like: ["초밥", "떡볶이"], hate: ["짜장면"] } },
+        { order: 5, name: "손정민", food: { like: ["짜장면", "파스타"], hate: ["짬뽕"] } },
+        { order: 6, name: "안은별", food: { like: ["짬뽕", "김밥"], hate: ["초밥"] } },
+        { order: 7, name: "윤종환", food: { like: ["피자", "치킨"], hate: ["햄버거"] } },
+        { order: 8, name: "최정민", food: { like: ["햄버거", "라면"], hate: ["파스타"] } },
+        { order: 9, name: "최현준", food: { like: ["짜장면", "떡볶이"], hate: ["김밥"] } },
+        { order: 10, name: "전선일", food: { like: ["초밥", "파스타"], hate: ["피자"] } },
+      ];
+      
+      // id가 root인 요소를 찾아 root에 담아준다.
+      const root = document.getElementById("root");
+
+      /**
+       * param
+       * return {element} div요소
+       * description 학생 데이터를 사용해서 테이블을 만들어주는 함수
+      */
+      function checkpoint() {
+        console.log("디버깅: checkpoint 함수 시작");
+        // div요소를 생성 해준다. 
+        const gridContainer = document.createElement("div");
+        // grid-container 클래스 이름 추가해준다.
+        gridContainer.className = "grid-container";
+
+        // 테이블 제목 데이터
+        let gridHeader = ["순서", "이름", "좋아하는 음식", "싫어하는 음식"];
+
+        // 테이블 제목 데이터 만큼 반복을 진행해준다.
+        gridHeader.forEach((headerText) => {
+          // div요소를 생성한다.
+          const headerCell = document.createElement("div");
+          // grid-header 클래스 이름 지정해준다.
+          headerCell.className = "grid-header";
+          // 테이블 제목 데이터를 차례대로 넣어준다. (순서 -> 이름 -> 좋아하는 음식 -> 싫어하는 음식)
+          headerCell.textContent = headerText;
+          gridContainer.appendChild(headerCell);
+        });
+
+        // [7, 윤종환 [치킨, 피자], [햄버거]]의 데이터와 같이 값을 가지고온다.
+        const createCell = (content) => {
+          // div 요소를 생성한다.
+          const cell = document.createElement("div");
+          // grid-cell 클래스 이름을 지정해준다.
+          cell.className = "grid-cell";
+          // div요소에 순서대로 값을 집어 넣는다.
+          cell.textContent = content;
+          return cell;
+        };
+
+        // 학생 데이터 만큼 반복을 진행한다.
+        students.forEach((student) => {
+          // 각 학생의 데이터를 배열로 만든다.
+          const cellContents = [
+            student.order,
+            student.name,
+            student.food.like.join(", "),
+            student.food.hate.join(", "),
+          ];
+
+          // 만들어진 요소 만큼 반복을 진행해서 append를 한다.
+          cellContents.map(createCell).forEach((cell) => gridContainer.appendChild(cell));
+        });
+
+        console.log("디버깅: 그리드 생성 완료", gridContainer);
+        return gridContainer;
+      }
+
+      // 학생 데이터를 사용하여 생성된 열을 가지고 온다.
+      const studentGrid = checkpoint();
+      // root에 추가해준다.
+      root.appendChild(studentGrid);
+      console.table(students);
+      console.log("디버깅: 학생 정보 그리드 DOM에 추가 완료");
+    </script>
+  </body>
+</html>
