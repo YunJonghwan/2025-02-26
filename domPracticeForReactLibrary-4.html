@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>클릭 이벤트 추가</title>
+  <style>
+    .container {
+      display: flex;
+      gap: 20px;
+    }
+    .student-list {
+      flex: 1;
+    }
+    .student-list li {
+      cursor: pointer;
+      padding: 8px;
+      margin: 4px 0;
+    }
+    .student-list li:hover {
+      background-color: #f0f0f0;
+    }
+    .detail-view {
+      flex: 1;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      min-height: 200px;
+    }
+    .active {
+      background-color: #e0e0e0;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script>
+    // 학생 데이터터
+    const students = [ 
+      { order: 1, name: '김민지', food: { like: ['짜장면', '짬뽕'], hate: ['피자'] } },
+      { order: 2, name: '김요훈', food: { like: ['햄버거', '초밥'], hate: ['라면'] } },
+      { order: 3, name: '김윤지', food: { like: ['피자', '라면'], hate: ['떡볶이'] } },
+      { order: 4, name: '김재승', food: { like: ['초밥', '떡볶이'], hate: ['짜장면'] } },
+      { order: 5, name: '손정민', food: { like: ['짜장면', '파스타'], hate: ['짬뽕'] } },
+      { order: 6, name: '안은별', food: { like: ['짬뽕', '김밥'], hate: ['초밥'] } },
+      { order: 7, name: '윤종환', food: { like: ['피자', '치킨'], hate: ['햄버거'] } },
+      { order: 8, name: '최정민', food: { like: ['햄버거', '라면'], hate: ['파스타'] } },
+      { order: 9, name: '최현준', food: { like: ['짜장면', '떡볶이'], hate: ['김밥'] } },
+      { order: 10, name: '전선일', food: { like: ['초밥', '파스타'], hate: ['피자'] } }
+    ];
+
+    // id가 root인 요소를 가지고 와서 root에 담는다.
+    const root = document.getElementById("root");
+
+    /**
+     * param 
+     * returns {element} 학생 정보가 추가된 div 요소
+     * desc 학생을 눌렀을 경우 누른 학생의 데이터를 표시하는 함수
+    */
+    function checkpoint() {
+      console.log("디버깅: checkpoint 함수 시작");
+      
+      // div 요소 생성
+      const container = document.createElement("div");
+      // 생성된 div 요소에 container 클래스 추가
+      container.className = "container";
+      
+      // ul 요소 생성
+      const ul = document.createElement("ul");
+      // 생성된 ul요소에 student-list 클래스 추가
+      ul.className = "student-list";
+      
+      // div 요소 생성
+      const detailView = document.createElement("div");
+      // 생성된 div요소에 detail-view 클래스 추가
+      detailView.className = "detail-view";
+      // 생성된 div요소에 글 추가
+      detailView.textContent = "학생을 선택해주세요.";
+
+      // 학생 데이터만큼 반복을 진행한다.
+      students.forEach((student) => {
+        // li 요소 생성
+        const li = document.createElement("li");
+        // 생성된 li요소에 학생 이름 추가
+        li.textContent = student.name;
+        // li요송 클릭 이벤트 추가
+        li.addEventListener("click", (e) => {
+          // 이전에 선택한 데이터 표시하지 않게 만든다.
+          ul.querySelectorAll('li').forEach(item => item.classList.remove('active'));
+          // 현재 선택한 데이터를 표시하기 위해 클래스 추가
+          li.classList.add('active');
+          
+          console.log(`디버깅: ${student.name} 클릭됨`);
+          // 백틱(`)을 사용해서 markdown생성
+          detailView.innerHTML = `
+            <h3>${student.name} 학생의 정보</h3>
+            <p>좋아하는 음식: ${student.food.like.join(", ")}</p>
+            <p>싫어하는 음식: ${student.food.hate.join(", ")}</p>
+          `;
+        });
+        // ul요소에 li요소 추가가
+        ul.appendChild(li);
+      });
+
+      // ul요소 추가
+      container.appendChild(ul);
+
+      // 학생을 누르지 않은 상태 즉 처음 상태는 "학생을 선택해주세요."가 화면에 표시가 되고
+      // 학생을 누르면 해당 학생의 데이터가 표시된다.
+      container.appendChild(detailView);
+      
+      console.log("디버깅: 모든 학생 이벤트 부착 완료", container);
+      return container;
+    }
+
+    const studentListWithEvent = checkpoint();
+    root.appendChild(studentListWithEvent);
+    console.log("디버깅: 클릭 이벤트가 부착된 학생 목록 DOM에 추가 완료");
+  </script>
+</body>
+</html>
