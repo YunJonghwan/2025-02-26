@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>학생 이름 리스트 렌더링하기</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      // 설명 : 학생 데이터
+      const students = [
+        { order: 1, name: "김민지", food: { like: ["짜장면", "짬뽕"], hate: ["피자"] } },
+        { order: 2, name: "김요훈", food: { like: ["햄버거", "초밥"], hate: ["라면"] } },
+        { order: 3, name: "김윤지", food: { like: ["피자", "라면"], hate: ["떡볶이"] } },
+        { order: 4, name: "김재승", food: { like: ["초밥", "떡볶이"], hate: ["짜장면"] } },
+        { order: 5, name: "손정민", food: { like: ["짜장면", "파스타"], hate: ["짬뽕"] } },
+        { order: 6, name: "안은별", food: { like: ["짬뽕", "김밥"], hate: ["초밥"] } },
+        { order: 7, name: "윤종환", food: { like: ["피자", "치킨"], hate: ["햄버거"] } },
+        { order: 8, name: "최정민", food: { like: ["햄버거", "라면"], hate: ["파스타"] } },
+        { order: 9, name: "최현준", food: { like: ["짜장면", "떡볶이"], hate: ["김밥"] } },
+        { order: 10, name: "전선일", food: { like: ["초밥", "파스타"], hate: ["피자"] } },
+      ];
+
+      // id가 root인 요소를 받아와 root에 담아준다.
+      const root = document.getElementById("root");
+
+      /**
+       * @param
+       * @returns {element} ul요소를 반환한다.
+       * @description 학생 데이터를 사용해서 li를 만드는 함수
+       */
+      function checkpoint() {
+        console.log("디버깅: checkpoint 함수 시작");
+        // ul태그 생성
+        const ul = document.createElement("ul");
+        // 학생 데이터 만큼 반복을 진행
+        students.forEach((student) => {
+          console.log("디버깅: 학생 처리 - ", student.name);
+          // li태그 생성
+          const li = document.createElement("li");
+          // 학생의 이름을 li에 추가
+          li.textContent = student.name;
+          // li요소를 ul요소에 추가
+          ul.appendChild(li);
+        });
+        console.log("디버깅: 모든 학생 처리 완료", ul);
+        return ul;
+      }
+
+      // ul태그를 받아와 studentList에 담아준다.
+      const studentList = checkpoint();
+      // ul태그를 root에 추가해준다.
+      root.appendChild(studentList);
+      console.log("디버깅: 학생 리스트 DOM에 추가 완료");
+    </script>
+  </body>
+</html>
